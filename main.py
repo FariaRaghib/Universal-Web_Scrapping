@@ -9,26 +9,42 @@ def scrape_html(url: str):
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # Find all tables manually
         tables = soup.find_all("table")
-
         if not tables:
-            return {"success": False, "error": "No tables found on the page", "table": None, "raw": None}
+            return {"success": False, "error": "No tables found", "table": None, "raw": None}
 
-        # Convert all tables into Pandas DataFrames
-        dfs = []
+        all_dfs = []
+
         for table in tables:
-            try:
-                df = pd.read_html(str(table))[0]
-                dfs.append(df)
-            except:
-                continue
+            headers = []
+            rows = []
 
-        if dfs:
-            # Return the first table (or merge later if you want multiple)
-            return {"success": True, "table": dfs[0], "raw": None, "error": None}
+            # Extract headers
+            header_row = table.find("thead")
+            if header_row:
+                headers = [th.get_text(strip=True) for th in header_row.find_all("th")]
+
+            # Extract rows
+            body_rows = table.find_all("tr")
+            for tr in body_rows:
+                cols = [td.get_text(strip=True) for td in tr.find_all(["td", "th"])]
+                if cols:
+                    rows.append(cols)
+
+            # Build DataFrame
+            if headers and rows:
+                df = pd.DataFrame(rows, columns=headers[:len(rows[0])])
+            else:
+                df = pd.DataFrame(rows)
+
+            if not df.empty:
+                all_dfs.append(df)
+
+        if all_dfs:
+            # Return the first table (could extend to all)
+            return {"success": True, "table": all_dfs[0], "raw": None, "error": None}
         else:
-            return {"success": False, "error": "Tables detected but could not be parsed", "table": None, "raw": None}
+            return {"success": False, "error": "Tables found but empty after parsing", "table": None, "raw": None}
 
     except Exception as e:
         return {"success": False, "error": str(e), "table": None, "raw": None}
