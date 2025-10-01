@@ -281,7 +281,7 @@ elif nav == "Examples":
         </div>
 
         <hr>
-        <p><i>👉 Try these URLs in the input bar to see how it works!</i></p>
+        <p><i>Try these URLs in the input bar to see how it works!</i></p>
 
         </div>
         """,
