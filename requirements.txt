@@ -3,5 +3,4 @@ pandas
 requests
 beautifulsoup4
 lxml
-openpyxl
-xlsxwriter
+html5lib
