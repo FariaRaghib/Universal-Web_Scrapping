@@ -1,34 +1,34 @@
 import requests
-import pandas as pd
 from bs4 import BeautifulSoup
+import pandas as pd
 
-def scrape_html(url):
-    """
-    Scrape data from an HTML page.
-    Tries to detect tables, falls back to div/p text.
-    """
+def scrape_html(url: str):
     try:
-        res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
-        res.raise_for_status()
-        soup = BeautifulSoup(res.text, "html.parser")
+        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+        response.raise_for_status()
 
-        # Try extracting a table
-        table = soup.find("table")
-        if table:
-            df = pd.read_html(str(table))[0]
-            return {"success": True, "table": df, "raw": None}
+        soup = BeautifulSoup(response.text, "html.parser")
 
-        # Fallback: divs
-        divs = [d.get_text(strip=True) for d in soup.find_all("div")[:10]]
-        if divs:
-            return {"success": True, "table": None, "raw": divs}
+        # Find all tables manually
+        tables = soup.find_all("table")
 
-        # Fallback: paragraphs
-        ps = [p.get_text(strip=True) for p in soup.find_all("p")[:10]]
-        if ps:
-            return {"success": True, "table": None, "raw": ps}
+        if not tables:
+            return {"success": False, "error": "No tables found on the page", "table": None, "raw": None}
 
-        return {"success": False, "error": "No structured data found"}
+        # Convert all tables into Pandas DataFrames
+        dfs = []
+        for table in tables:
+            try:
+                df = pd.read_html(str(table))[0]
+                dfs.append(df)
+            except:
+                continue
+
+        if dfs:
+            # Return the first table (or merge later if you want multiple)
+            return {"success": True, "table": dfs[0], "raw": None, "error": None}
+        else:
+            return {"success": False, "error": "Tables detected but could not be parsed", "table": None, "raw": None}
 
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        return {"success": False, "error": str(e), "table": None, "raw": None}
