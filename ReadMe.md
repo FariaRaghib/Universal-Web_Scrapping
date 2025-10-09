@@ -1,12 +1,12 @@
 # Universal Data Fetcher
 
-Universal Data Fetcher is a web app built with **Streamlit** that helps you fetch data from any website or API without needing to code.  
-It supports **HTML scraping** (for sites without APIs) and **API calling** (with or without authentication keys).  
+Universal Data Fetcher is a web app built with **Streamlit** that helps you fetch data from any website or API without needing to code.
+It supports **HTML scraping** (for sites without APIs) and **API calling** (with or without authentication keys).
 The app also lets you download the extracted data as an **Excel file (.xlsx)** for analysis or reporting.
 
 ---
 
-## Features
+##  Features
 - **HTML Scraper**: Enter a website URL and automatically extract tables or text.
 - **API Caller**: Enter an API endpoint (with optional API key) to fetch structured JSON data.
 - **Excel Export**: Save fetched data directly into an Excel file.
@@ -15,7 +15,7 @@ The app also lets you download the extracted data as an **Excel file (.xlsx)** f
 
 ---
 
-## Example Use Cases
+##  Example Use Cases
 - Collect live **cryptocurrency prices** (CoinGecko API).
 - Scrape **COVID-19 stats** tables from Worldometers.
 - Fetch **weather data** from OpenWeatherMap with an API key.
@@ -23,7 +23,7 @@ The app also lets you download the extracted data as an **Excel file (.xlsx)** f
 
 ---
 
-## Tech Stack
+##  Tech Stack
 - [Streamlit](https://streamlit.io/) – Frontend & app framework
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) – HTML scraping
 - [Requests](https://docs.python-requests.org/en/latest/) – HTTP requests
@@ -31,11 +31,10 @@ The app also lets you download the extracted data as an **Excel file (.xlsx)** f
 
 ---
 
-## Installation & Setup
+##  Installation & Setup
 Clone this repo and install dependencies:
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/universal-data-fetcher.git
 cd universal-data-fetcher
 pip install -r requirements.txt
-```
